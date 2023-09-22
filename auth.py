@@ -9,10 +9,10 @@ def register_user():
 	user = User.get_user_by_username(username=data.get("username"))
 
 	if user:
-		return jsonify({"error":"User already exist"})
+		return jsonify({"error":"User already exist"}), 403
 	
 	new_user= User(username=data.get("username"),email=data.get("email"))
 	new_user.set_password(password=data.get('password'))
 	new_user.save()
-	return jsonify({"message":"User created"})
+	return jsonify({"message":"User created"}), 201
 
