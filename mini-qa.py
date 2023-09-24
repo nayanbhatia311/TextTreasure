@@ -34,42 +34,38 @@ myCassandraVStore = Cassandra(
     embedding=myEmbedding,
     session=astraSession,
     keyspace=ASTRA_DB_KEYSPACE,
-    table_name="qa_mini_demo",
+    table_name="qa_new_demo",
 )
 
 directory_path = "docx/"
 docx_files = [f for f in os.listdir(directory_path) if f.endswith('.docx')]
 
-doc_contents = {}
+doc_paragraphs = []
 
-# Loop through each file and extract its content
 for docx_file in docx_files:
     docx_file_path = os.path.join(directory_path, docx_file)
     content = docx2txt.process(docx_file_path).strip()
-    doc_contents[docx_file] = content
+    paragraphs = [p for p in content.split("\n") if p]
+    doc_paragraphs.extend(paragraphs)
+print(doc_paragraphs)
 
-# Load data from local .docx file
+user_input = input("Do you want to add embeddings? (yes/no): ").strip().lower()
 
-for doc_name,content in doc_contents.items():
+if user_input == 'yes':
+    total_paragraphs = len(doc_paragraphs)
+    print(f"Generating embeddings and storing in AstraDb for {total_paragraphs} paragraphs")
+    myCassandraVStore.add_texts(doc_paragraphs)
+    print(f"Inserted embeddings for {total_paragraphs} paragraphs")
 
-	headlines = content
-
-	print(f"Generate embedding and store in AstraDb for {doc_name}")
-	myCassandraVStore.add_texts(headlines)
-
-print(f"Inserted {len(headlines)} headlines")
 vectorIndex = VectorStoreIndexWrapper(vectorstore=myCassandraVStore)
 
 while True:
     query_text = input("\nEnter question (type 'quit' to exit)\n")
-
     if query_text.lower() == "quit":
         break
-
     print("Question: ", query_text)
     answer = vectorIndex.query(query_text, llm=llm).strip()
     print(f"Answer:{answer}")
-
     print("Document by relevance:")
-    for doc, score in myCassandraVStore.similarity_search_with_score(query_text, k=2):
-        print(score, doc.page_content)
+    for doc, score in myCassandraVStore.similarity_search_with_score(query_text, k=4):
+        print("  %0.4f \"%s \"" % (score, doc.page_content))
