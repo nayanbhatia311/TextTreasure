@@ -25,3 +25,13 @@ auth_provider = PlainTextAuthProvider(ASTRA_DB_CLIENT_ID,ASTRA_DB_CLIENT_SECRET)
 cluster = Cluster(cloud=cloud_config, auth_provider=auth_provider)
 astraSession= cluster.connect()
 
+llm = OPENAI(openai_api_key=OPENAI_API_KEY)
+myEmbedding = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
+
+myCassandraVStore = Cassandra(
+	embedding=myEmbedding,
+	session=astraSession,
+	keyspace=ASTRA_DB_KEYSPACE,
+	table_name="qa_mini_demo",
+
+)
