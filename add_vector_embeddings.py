@@ -49,23 +49,10 @@ for docx_file in docx_files:
     doc_paragraphs.extend(paragraphs)
 print(doc_paragraphs)
 
-user_input = input("Do you want to add embeddings? (yes/no): ").strip().lower()
 
-if user_input == 'yes':
-    total_paragraphs = len(doc_paragraphs)
-    print(f"Generating embeddings and storing in AstraDb for {total_paragraphs} paragraphs")
-    myCassandraVStore.add_texts(doc_paragraphs)
-    print(f"Inserted embeddings for {total_paragraphs} paragraphs")
 
-vectorIndex = VectorStoreIndexWrapper(vectorstore=myCassandraVStore)
+total_paragraphs = len(doc_paragraphs)
+print(f"Generating embeddings and storing in AstraDb for {total_paragraphs} paragraphs")
+myCassandraVStore.add_texts(doc_paragraphs)
+print(f"Inserted embeddings for {total_paragraphs} paragraphs")
 
-while True:
-    query_text = input("\nEnter question (type 'quit' to exit)\n")
-    if query_text.lower() == "quit":
-        break
-    print("Question: ", query_text)
-    answer = vectorIndex.query(query_text, llm=llm).strip()
-    print(f"Answer:{answer}")
-    print("Document by relevance:")
-    for doc, score in myCassandraVStore.similarity_search_with_score(query_text, k=4):
-        print("  %0.4f \"%s \"" % (score, doc.page_content))

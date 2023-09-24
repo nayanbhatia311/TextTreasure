@@ -50,21 +50,21 @@ def index():
     message = request.args.get('message')
     return render_template('index.html', message=message)
 
-@app.route('/add_embeddings', methods=['POST'])
-def add_embeddings():
-    directory_path = "docx/"
-    docx_files = [f for f in os.listdir(directory_path) if f.endswith('.docx')]
-    doc_paragraphs = []
+# @app.route('/add_embeddings', methods=['POST'])
+# def add_embeddings():
+#     directory_path = "docx/"
+#     docx_files = [f for f in os.listdir(directory_path) if f.endswith('.docx')]
+#     doc_paragraphs = []
 
-    for docx_file in docx_files:
-        docx_file_path = os.path.join(directory_path, docx_file)
-        content = docx2txt.process(docx_file_path).strip()
-        paragraphs = [p for p in content.split("\n") if p]
-        doc_paragraphs.extend(paragraphs)
+#     for docx_file in docx_files:
+#         docx_file_path = os.path.join(directory_path, docx_file)
+#         content = docx2txt.process(docx_file_path).strip()
+#         paragraphs = [p for p in content.split("\n") if p]
+#         doc_paragraphs.extend(paragraphs)
 
-    myCassandraVStore.add_texts(doc_paragraphs)
+#     myCassandraVStore.add_texts(doc_paragraphs)
 
-    return redirect(url_for('index', message="Creating embeddings from docx/ and sending to the online DB."))
+#     return redirect(url_for('index', message="Creating embeddings from docx/ and sending to the online DB."))
 
 @app.route('/ask_question', methods=['POST'])
 def ask_question():
