@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Question Answering App</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-5">Welcome to the QA App</h1>
+
+        {% if message %}
+        <div class="alert alert-info">
+            {{ message }}
+        </div>
+        {% endif %}
+
+        <form action="/add_embeddings" method="post">
+            <button type="submit" class="btn btn-primary mb-3">Add Embeddings</button>
+        </form>
+
+        <form action="/ask_question" method="post" class="mb-5">
+            <div class="input-group">
+                <input type="text" class="form-control" name="question" placeholder="Enter your question">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-success">Ask</button>
+                </div>
+            </div>
+        </form>
+
+        {% if answer %}
+        <h2>Answer:</h2>
+        <p class="bg-light p-3 rounded">{{ answer }}</p>
+
+        <h3 class="mt-4">Documents by Relevance:</h3>
+        <ul class="list-group">
+            {% for doc, score in relevant_docs %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ doc }}
+                <span class="badge badge-primary badge-pill">{{ score }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
