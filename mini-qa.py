@@ -35,3 +35,28 @@ myCassandraVStore = Cassandra(
 	table_name="qa_mini_demo",
 
 )
+
+print("load data from huggingface")
+myDataset=load_dataset("Biddls/Onion_News", split="train")
+headlines = myDatasets["text"][:50]
+
+print("Generate embedding and store in AstraDb")
+myCassandraVStore.add_texts(headlines)
+
+print(f"Inserted {len(headlines} headlines")
+vectorIndex= VectorStoreIndexWrapper(vectorstore=myCassandraVStore)
+
+
+while True:
+	query_text=input("Enter question (type 'quit' to exit")
+	
+	if query_text.lower()=="quit":
+		break
+
+	print("Question: ",query_text)
+	answer=vectorIndex.query(quert_text,llm=llm).strip()
+	print(f"Answer:{answer}")
+
+	print("Document by relevance:")
+	for doc,store in myCassandraVStore.similarity_search_with_score(query_text,k=4):
+		print(score,doc.page_content)
