@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from dotenv import load_dotenv
-from models import User
+from models import User, TokenBlockList
 from extensions import db, jwt
 from auth import auth_bp
 from users import user_bp
@@ -52,6 +52,14 @@ def create_app():
         if identity == "admin":
             return {"is_staff": True}
         return {"is_staff": False}
+
+    @jwt.token_in_blocklist_loader
+    def token_in_blocklist_callback(jwt_header, jwt_data):
+        jti = jwt_data['jti']
+        token = db.session.query(TokenBlockList).filter(
+            TokenBlockList.jti == jti).scalar()
+
+        return token is not None
 
     return app
 
