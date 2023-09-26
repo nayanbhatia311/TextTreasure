@@ -40,6 +40,12 @@ def create_app():
             "error": "authorized_error"
         }), 401
 
+    @jwt.additional_claims_loader
+    def make_addtional_claims(identity):
+        if identity == "admin":
+            return {"is_staff": True}
+        return {"is_staff": False}
+
     return app
 
 
