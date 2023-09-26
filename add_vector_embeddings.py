@@ -45,14 +45,13 @@ doc_paragraphs = []
 for docx_file in docx_files:
     docx_file_path = os.path.join(directory_path, docx_file)
     content = docx2txt.process(docx_file_path).strip()
-    paragraphs = [p for p in content.split("\n") if p]
+    paragraphs = [p for p in content.split(".") if p]
     doc_paragraphs.extend(paragraphs)
 print(doc_paragraphs)
 
 
-
 total_paragraphs = len(doc_paragraphs)
-print(f"Generating embeddings and storing in AstraDb for {total_paragraphs} paragraphs")
+print(
+    f"Generating embeddings and storing in AstraDb for {total_paragraphs} paragraphs")
 myCassandraVStore.add_texts(doc_paragraphs)
 print(f"Inserted embeddings for {total_paragraphs} paragraphs")
-
