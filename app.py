@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from dotenv import load_dotenv
-
+from models import User
 from extensions import db, jwt
 from auth import auth_bp
 from users import user_bp
@@ -18,7 +18,14 @@ def create_app():
     app.register_blueprint(user_bp, url_prefix="/users")
     app.register_blueprint(home_bp, url_prefix="/")
 
+    # load user
+
+    @jwt.user_lookup_loader
+    def user_loopup_callback(_jwt_headers, jwt_data,):
+        username = jwt_data.get('sub')
+        return User.query.filter_by(username=username).one_or_none()
     # jwt error handler
+
     @jwt.expired_token_loader
     def expired_token_callback(jwt_header, jwt_data):
         return jsonify({
