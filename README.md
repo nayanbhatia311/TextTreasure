@@ -1,7 +1,7 @@
 
 ## Introduction
 
-`chatgpt_query_bot` is a Flask-based application designed to provide an interface for users to interact and make queries. The main entry point is the `app.py` file which serves the `index.html` for the front end.
+`TextTreasure` is a Flask-based application designed to provide an interface for users to interact and make queries. The main entry point is the `app.py` file which serves the `index.html` for the front end.
 
 ## Features
 
