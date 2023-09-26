@@ -1,25 +1,4 @@
 
-
-
-
-
-## Setup
-
-1. **Installation**: Install the required packages using the command:
-```
-pip install -r requirements.txt
-```
-2. **Environment Variables**: Populate the `.env` file using the `.env_sample` as a reference.
-3. **Running the Application**: After setting up, you can start the Flask application by executing:
-```
-python app.py
-```
-
----
-
-Would you like to make any modifications or additions, or would you like to proceed with saving this to the new README file?
-# chatgpt_query_bot
-
 ## Introduction
 
 `chatgpt_query_bot` is a Flask-based application designed to provide an interface for users to interact and make queries. The main entry point is the `app.py` file which serves the `index.html` for the front end.
@@ -85,7 +64,7 @@ extensions.py: Initializes extensions like SQLAlchemy and JWTManager for the Fla
 
 ### Setting Up a Virtual Environment
 
-Before you begin, ensure you have Python 3.8 installed. 
+Before you begin, please make sure you have Python 3.8 installed. 
 
 1. **Install virtualenv** (if you haven't already):
 
