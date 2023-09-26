@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from dotenv import load_dotenv
-from models import User, TokenBlockList
+from models import User, TokenBlockList, is_logged
 from extensions import db, jwt
 from auth import auth_bp
 from users import user_bp
@@ -37,14 +37,15 @@ def create_app():
     def invalid_token_callback(error):
         return jsonify({
             "message": "signature invalid",
-            "error": "invalid_token"
+            "error": error
+
         }), 401
 
     @jwt.unauthorized_loader
     def missing_token_callback(error):
         return jsonify({
             "message": "Token invalid",
-            "error": "authorized_error"
+            "error": error
         }), 401
 
     @jwt.additional_claims_loader

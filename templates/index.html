@@ -5,25 +5,60 @@
     <title>Question Answering App</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h2 {
+            margin-top: 2rem;
+        }
+
+        .rounded {
+            border: 1px solid #e2e2e2;
+        }
+
+        .badge-pill {
+            font-size: 1rem;
+        }
+    </style>
 </head>
 
 <body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">QA App</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <button class="btn btn-outline-danger" id="signoutBtn">Sign Out</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="container mt-5">
         <h1 class="text-center mb-5">Welcome to the QA App</h1>
 
-        <!-- {% if message %}
-        <div class="alert alert-info">
+        <!-- Uncomment if needed
+        {% if message %}
+        <div class="alert alert-info mb-3">
             {{ message }}
         </div>
         {% endif %}
 
-        <form action="/add_embeddings" method="post">
-            <button type="submit" class="btn btn-primary mb-3">Add Embeddings</button>
-        </form> -->
+        <form action="/add_embeddings" method="post" class="mb-4">
+            <button type="submit" class="btn btn-primary">Add Embeddings</button>
+        </form>
+        -->
 
-        <form action="/ask_question" method="post" class="mb-5">
+        <form action="/ask_question" method="post" class="mb-4">
             <div class="input-group">
-                <input type="text" class="form-control" name="question" placeholder="Enter your question">
+                <input type="text" class="form-control" name="question" placeholder="Enter your question" required>
                 <div class="input-group-append">
                     <button type="submit" class="btn btn-success">Ask</button>
                 </div>
@@ -32,9 +67,9 @@
 
         {% if answer %}
         <h2>Answer:</h2>
-        <p class="bg-light p-3 rounded">{{ answer }}</p>
+        <div class="bg-light p-3 rounded mb-4">{{ answer }}</div>
 
-        <h3 class="mt-4">Documents by Relevance:</h3>
+        <h3>Documents by Relevance:</h3>
         <ul class="list-group">
             {% for doc, score in relevant_docs %}
             <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -50,6 +85,23 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.getElementById("signoutBtn").addEventListener("click", function () {
+            fetch('/auth/logout', {
+                method: 'GET',
+            }).then(response => {
+                if (response.ok) {
+                    // Handle successful logout, like redirecting to a login page or updating the UI
+                    window.location.href = '/';
+                } else {
+                    // Handle errors or unsuccessful logouts
+                    alert("Error logging out. Please try again.");
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>

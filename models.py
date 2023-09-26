@@ -2,6 +2,7 @@ import datetime
 from extensions import db
 from uuid import uuid4
 from werkzeug.security import generate_password_hash, check_password_hash
+is_logged = False
 
 
 class User(db.Model):

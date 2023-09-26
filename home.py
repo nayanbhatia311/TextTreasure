@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, render_template
+from flask import Blueprint, request, jsonify, render_template, redirect, url_for
 from flask_jwt_extended import jwt_required
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
@@ -12,6 +12,19 @@ from langchain.vectorstores.cassandra import Cassandra
 from langchain.indexes.vectorstore import VectorStoreIndexWrapper
 from langchain.llms import OpenAI
 from langchain.embeddings import OpenAIEmbeddings
+from functools import wraps
+import models
+
+
+def check_logged_in(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        # This is just a placeholder. Replace with the actual method to fetch the current user.
+
+        if not models.is_logged:
+            return render_template('login.html')
+        return func(*args, **kwargs)
+    return decorated_function
 
 
 load_dotenv()
@@ -48,12 +61,14 @@ home_bp = Blueprint(
 
 
 @home_bp.get('/')
+@check_logged_in
 def index():
     message = request.args.get('message')
     return render_template('index.html', message=message)
 
 
 @home_bp.post('/ask_question')
+@check_logged_in
 def ask_question():
     question = request.form['question']
     vectorIndex = VectorStoreIndexWrapper(vectorstore=myCassandraVStore)
