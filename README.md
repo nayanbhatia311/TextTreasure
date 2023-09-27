@@ -41,15 +41,31 @@ Ensure to replace placeholders (e.g., `<your_flask_secret_key>`) with your actua
 
 ## File Structure:
 
-auth.py: Handles user authentication and JWT token management. Provides routes for login, logout, and token refresh. 
-home.py: Contains the main application routes, integrates with Cassandra for database interactions, and supports document text extraction. 
-models.py: Defines the ORM models for the application, such as the User model. 
-users.py: Provides routes for user-related operations like fetching user details. 
-add_vector_embeddings.py: Integrates with the Cassandra database to add vector embeddings from the `docx` folder. Uses the OpenAI API for vector generation. 
-app.py: Initializes the Flask app, loads environment variables, and registers blueprints. 
-schemas.py: Contains Marshmallow schemas for data serialization, including the UserSchema. 
-requirements.txt: Lists all the Python package dependencies required to run the application. 
-extensions.py: Initializes extensions like SQLAlchemy and JWTManager for the Flask app. 
+auth.py: Handles user authentication and JWT token management. Provides routes for login, logout, and token refresh.  
+
+
+home.py: Contains the main application routes, integrates with Cassandra for database interactions, and supports document text extraction.  
+
+
+models.py: Defines the ORM models for the application, such as the User model.  
+
+
+users.py: Provides routes for user-related operations like fetching user details.  
+
+
+add_vector_embeddings.py: Integrates with the Cassandra database to add vector embeddings from the `docx` folder. Uses the OpenAI API for vector generation.  
+
+
+app.py: Initializes the Flask app, loads environment variables, and registers blueprints.  
+
+
+schemas.py: Contains Marshmallow schemas for data serialization, including the UserSchema.  
+
+
+requirements.txt: Lists all the Python package dependencies required to run the application.  
+
+
+extensions.py: Initializes extensions like SQLAlchemy and JWTManager for the Flask app.  
 
 
 
