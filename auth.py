@@ -46,7 +46,6 @@ def login_user():
         response = jsonify({"message": "Logged in"})
         set_access_cookies(response, access_token)
         set_refresh_cookies(response, refresh_token)
-        models.is_logged = True
         return response, 200
     return jsonify({
         "error": "Invalid password"
@@ -90,5 +89,4 @@ def logout_user():
     response = jsonify(
         {"message": f"logged out succesfully."})
     unset_jwt_cookies(response)
-    models.is_logged = False
     return response, 200
