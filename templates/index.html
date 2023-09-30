@@ -59,6 +59,7 @@
         <form action="/ask_question" method="post" class="mb-4">
             <div class="input-group">
                 <input type="text" class="form-control" name="question" placeholder="Enter your question" required>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <div class="input-group-append">
                     <button type="submit" class="btn btn-success">Ask</button>
                 </div>
@@ -89,11 +90,14 @@
     <script>
         document.getElementById("signoutBtn").addEventListener("click", function () {
             fetch('/auth/logout', {
-                method: 'GET',
+                method: 'POST',
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token }}"
+                }
             }).then(response => {
                 if (response.ok) {
                     // Handle successful logout, like redirecting to a login page or updating the UI
-                    window.location.href = '/';
+                    window.location.href = '/auth/login';
                 } else {
                     // Handle errors or unsuccessful logouts
                     alert("Error logging out. Please try again.");

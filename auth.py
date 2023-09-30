@@ -3,7 +3,8 @@ from models import User, TokenBlockList
 import models
 from flask_jwt_extended import (create_access_token,
                                 create_refresh_token, jwt_required,
-                                get_jwt, current_user, get_jwt_identity)
+                                current_user, get_jwt_identity,
+                                set_access_cookies, set_refresh_cookies, unset_jwt_cookies)
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -43,9 +44,8 @@ def login_user():
         access_token = create_access_token(identity=user.username)
         refresh_token = create_refresh_token(identity=user.username)
         response = jsonify({"message": "Logged in"})
-        response.set_cookie("access_token_cookie", access_token)
-        response.set_cookie("refresh_token_cookie", refresh_token)
-        models.is_logged = True
+        set_access_cookies(response, access_token)
+        set_refresh_cookies(response, refresh_token)
         return response, 200
     return jsonify({
         "error": "Invalid password"
@@ -77,8 +77,8 @@ def refresh_access():
     })
 
 
-@auth_bp.get('/logout')
-# @jwt_required(verify_type=False)
+@auth_bp.post('/logout')
+@jwt_required()
 def logout_user():
     # jwt = get_jwt()
     # jti = jwt['jti']
@@ -88,7 +88,5 @@ def logout_user():
 
     response = jsonify(
         {"message": f"logged out succesfully."})
-    models.is_logged = False
-    response.delete_cookie("access_token_cookie")
-    response.delete_cookie("refresh_token_cookie")
+    unset_jwt_cookies(response)
     return response, 200

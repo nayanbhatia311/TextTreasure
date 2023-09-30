@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
 import docx2txt
@@ -14,18 +14,6 @@ from langchain.llms import OpenAI
 from langchain.embeddings import OpenAIEmbeddings
 from functools import wraps
 import models
-
-
-def check_logged_in(func):
-    @wraps(func)
-    def decorated_function(*args, **kwargs):
-        # This is just a placeholder. Replace with the actual method to fetch the current user.
-
-        if not models.is_logged:
-            return render_template('login.html')
-        return func(*args, **kwargs)
-    return decorated_function
-
 
 load_dotenv()
 
@@ -61,14 +49,16 @@ home_bp = Blueprint(
 
 
 @home_bp.get('/')
-@check_logged_in
+@jwt_required()
 def index():
     message = request.args.get('message')
-    return render_template('index.html', message=message)
+    csrf_token = get_jwt().get("csrf")
+
+    return render_template('index.html', message=message, csrf_token=csrf_token)
 
 
 @home_bp.post('/ask_question')
-@check_logged_in
+@jwt_required()
 def ask_question():
     question = request.form['question']
     vectorIndex = VectorStoreIndexWrapper(vectorstore=myCassandraVStore)
@@ -77,7 +67,8 @@ def ask_question():
     relevant_docs = [(doc.page_content, "%0.4f" % score) for doc,
                      score in myCassandraVStore.similarity_search_with_score(question, k=4)]
 
-    return render_template('index.html', answer=answer, relevant_docs=relevant_docs)
+    csrf_token = get_jwt().get("csrf")
+    return render_template('index.html', answer=answer, relevant_docs=relevant_docs, csrf_token=csrf_token)
 
 # @home_bp.post('/add_embeddings')
 # def add_embeddings():

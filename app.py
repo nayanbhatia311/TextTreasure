@@ -1,6 +1,8 @@
+from dotenv import load_dotenv
+import os
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from dotenv import load_dotenv
-from models import User, TokenBlockList, is_logged
+from models import User, TokenBlockList
 from extensions import db, jwt
 from auth import auth_bp
 from users import user_bp
@@ -8,8 +10,24 @@ from home import home_bp
 
 
 def create_app():
+    load_dotenv()
+
     app = Flask(__name__)
     app.config.from_prefixed_env()
+
+    # secret for signing jwt
+    app.config['JWT_SECRET_KEY'] = os.getenv("FLASK_SECRET_KEY")
+
+    # check cookies for jwt token
+    app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+   
+    # set to true so cookies will only be sent by browser over https
+    app.config["JWT_COOKIE_SECURE"] = False
+
+    # prevent CSRF attacks
+    app.config["JWT_COOKIE_CSRF_PROTECT"] = True
+    app.config["JWT_CSRF_IN_COOKIES"] = False
+    app.config["JWT_CSRF_CHECK_FORM"] = True
 
     db.init_app(app)
     jwt.init_app(app)
