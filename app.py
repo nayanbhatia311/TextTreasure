@@ -20,7 +20,7 @@ def create_app():
 
     # check cookies for jwt token
     app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
-   
+
     # set to true so cookies will only be sent by browser over https
     app.config["JWT_COOKIE_SECURE"] = False
 
@@ -61,10 +61,7 @@ def create_app():
 
     @jwt.unauthorized_loader
     def missing_token_callback(error):
-        return jsonify({
-            "message": "Token invalid",
-            "error": error
-        }), 401
+        return render_template('login.html')
 
     @jwt.additional_claims_loader
     def make_addtional_claims(identity):
