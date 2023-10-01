@@ -130,6 +130,53 @@ Now, you can run your project inside this virtual environment. When you're done 
 deactivate
 ```
 
+Certainly! Below is your modified README section that includes instructions on how to initialize the database from the Flask shell:
+
+```markdown
+...
+
+## Setup
+
+1. Install the required packages using the provided `requirements.txt`.
+2. Initialize the database and run migrations if necessary.
+3. Start the Flask application.
+
+## Steps:
+
+...
+
+### Database Initialization
+
+Before starting the server, creating and initialising the database schema is important. Here are the steps to do it from the Flask shell:
+
+1. **Activate your virtual environment** (if not already activated):
+
+- **On macOS and Linux**:
+
+```bash
+source venv/bin/activate
+```
+
+- **On Windows**:
+
+```bash
+.\venv\Scripts\activate
+```
+
+2. **Start the Flask shell**:
+
+```bash
+flask shell
+```
+
+3. **Once inside the Flask shell, import the necessary items and create the database**:
+
+```python
+from extensions import db
+db.create_all()
+```
+
+Now, your database should be initialized and ready for use.
 
 
 
