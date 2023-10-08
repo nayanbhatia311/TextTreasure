@@ -130,7 +130,6 @@ Now, you can run your project inside this virtual environment. When you're done 
 deactivate
 ```
 
-Certainly! Below is your modified README section that includes instructions on how to initialize the database from the Flask shell:
 
 ```markdown
 ...
@@ -199,5 +198,6 @@ python app.py
 This will start the Flask application, and you should be able to access it via your web browser on port 5001.
 
 
+Note: ReadMe created with the help of ChatGpt. 
 
 
